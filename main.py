@@ -46,7 +46,7 @@ class PaymentRequest(BaseModel):
 
 @app.get("/")
 def home():
-    return FileResponse("index.html")
+    return FileResponse(BASE_DIR / "index.html")
 
 @app.get("/dashboard")
 def dashboard():
