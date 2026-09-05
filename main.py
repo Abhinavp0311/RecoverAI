@@ -6,10 +6,16 @@ import joblib
 import os
 
 
-# Load trained model
-pipeline = joblib.load(
-    "recovery_pipeline_v2.pkl"
-)
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+
+if (BASE_DIR / "recovery_pipeline_v2.pkl").exists():
+    MODEL_PATH = BASE_DIR / "recovery_pipeline_v2.pkl"
+else:
+    MODEL_PATH = BASE_DIR.parent / "models" / "recovery_pipeline_v2.pkl"
+
+pipeline = joblib.load(MODEL_PATH)
 
 
 # Create FastAPI application
@@ -40,7 +46,7 @@ class PaymentRequest(BaseModel):
 
 @app.get("/")
 def home():
-    return FileResponse("app/index.html")
+    return FileResponse("index.html")
 
 @app.get("/dashboard")
 def dashboard():
