@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RecoverAI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #6b7280;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .footer {
+             text-align: center;
+            margin-top: 30px;
+             padding: 20px;
+            font-size: 12px;
+            color: #64748b;
+            border-top: 1px solid #e5e7eb;
+}
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        .card h3 {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .card .value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        .panel h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 7px;
+            background: #111827;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background: #374151;
+        }
+
+        .result {
+            display: none;
+        }
+
+        .result-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .action {
+            font-size: 18px;
+        }
+
+        .error {
+            color: #dc2626;
+            margin-top: 15px;
+        }
+        .opportunities-panel {
+            margin-top: 24px;
+            overflow: hidden;
+        }
+
+        .section-description {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: -12px;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px;
+            background: #f9fafb;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-top: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        .action-badge {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .action-retry {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.action-later {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.action-wait {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.action-stop {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.action-update {
+    background: #ede9fe;
+    color: #5b21b6;
+}
+.action-distribution-panel {
+    margin-top: 24px;
+}
+
+.chart-row {
+    display: grid;
+    grid-template-columns: 190px 1fr 70px;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.chart-label {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.chart-bar-container {
+    height: 18px;
+    background: #f3f4f6;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.chart-bar {
+    height: 100%;
+    width: 0%;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+.action-stop-bar {
+    background: #fca5a5;
+}
+
+.action-retry-bar {
+    background: #86efac;
+}
+
+.action-wait-bar {
+    background: #93c5fd;
+}
+
+.action-update-bar {
+    background: #c4b5fd;
+}
+
+.chart-count {
+    font-weight: bold;
+    text-align: right;
+    font-size: 14px;
+}
+        @media (max-width: 800px) {
+            .cards,
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .filters {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.filter-group {
+    width: 220px;
+}
+
+.filter-group label {
+    margin-bottom: 6px;
+}
+
+@media (max-width: 800px) {
+
+    .filters {
+        flex-direction: column;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+}
+    </style>
+</head>
+
+
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>RecoverAI</h1>
+            <p>AI-powered revenue recovery & smart retry system</p>
+        </header>
+
+
+        <!-- Dashboard cards -->
+
+       <div class="cards">
+
+    <div class="card">
+        <h3>Estimated Recoverable Revenue</h3>
+        <div class="value" id="expectedRecovery">
+            Loading...
+        </div>
+    </div>
+
+    <div class="card">
+    <h3>Total Failed Value</h3>
+    <div id="totalFailedValue" class="value">Loading...</div>
+</div>
+
+    <div class="card">
+        <h3>Recovery Rate</h3>
+        <div class="value" id="recoveryRate">
+            Loading...
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Failed Payments</h3>
+        <div class="value" id="totalPayments">
+            Loading...
+        </div>
+    </div>
+
+</div>
+
+
+        <!-- Main section -->
+
+        <div class="main-grid">
+
+
+            <!-- Payment form -->
+
+            <div class="panel">
+
+                <h2>Analyze Failed Payment</h2>
+
+                <form id="paymentForm">
+
+                    <div class="form-group">
+                        <label>Amount (₹)</label>
+
+                        <input
+                            type="number"
+                            id="amount"
+                            value="5000"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Customer Success Rate</label>
+
+                        <input
+                            type="number"
+                            id="customer_success_rate"
+                            value="0.70"
+                            min="0"
+                            max="1"
+                            step="0.01"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Customer Lifetime Value (₹)</label>
+
+                        <input
+                            type="number"
+                            id="customer_lifetime_value"
+                            value="50000"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Payment Method</label>
+
+                        <select id="payment_method">
+
+                            <option value="UPI">UPI</option>
+                            <option value="Card">Card</option>
+                            <option value="NetBanking">NetBanking</option>
+                            <option value="Wallet">Wallet</option>
+
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Failure Reason</label>
+
+                        <select id="failure_reason">
+
+                            <option value="Network Error">
+                                Network Error
+                            </option>
+
+                            <option value="Technical Error">
+                                Technical Error
+                            </option>
+
+                            <option value="Insufficient Funds">
+                                Insufficient Funds
+                            </option>
+
+                            <option value="Bank Declined">
+                                Bank Declined
+                            </option>
+
+                            <option value="Expired Card">
+                                Expired Card
+                            </option>
+
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Retry Count</label>
+
+                        <input
+                            type="number"
+                            id="retry_count"
+                            value="0"
+                            min="0"
+                            max="5"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Transaction Hour</label>
+
+                        <input
+                            type="number"
+                            id="transaction_hour"
+                            value="14"
+                            min="0"
+                            max="23"
+                            required
+                        >
+                    </div>
+
+
+                    <button type="submit">
+                        Analyze Payment
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- Results -->
+
+            <div class="panel">
+
+                <h2>AI Recommendation</h2>
+
+                <div id="result" class="result">
+
+                    <div class="result-item">
+
+                        <div class="result-label">
+                            Recovery Probability
+                        </div>
+
+                        <div
+                            id="probability"
+                            class="result-value"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+                    <div class="result-item">
+
+                        <div class="result-label">
+                            Expected Revenue
+                        </div>
+
+                        <div
+                            id="expectedRevenue"
+                            class="result-value"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+                    <div class="result-item">
+
+                        <div class="result-label">
+                            Recommended Action
+                        </div>
+
+                        <div
+                            id="action"
+                            class="result-value action"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+                    <div class="result-item">
+
+                        <div class="result-label">
+                            Recommended Retry Delay
+                        </div>
+
+                        <div
+                            id="retryDelay"
+                            class="result-value"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div id="error" class="error"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+<!-- Action Distribution -->
+
+<div class="panel action-distribution-panel">
+
+    <h2>Recovery Action Distribution</h2>
+
+    <p class="section-description">
+        Recommended actions across all failed payments.
+    </p>
+
+    <div id="actionChart">
+
+        <div class="chart-row">
+            <div class="chart-label">
+                DO_NOT_RETRY
+            </div>
+
+            <div class="chart-bar-container">
+                <div
+                    id="bar-do-not-retry"
+                    class="chart-bar action-stop-bar"
+                ></div>
+            </div>
+
+            <div
+                id="count-do-not-retry"
+                class="chart-count"
+            >
+                -
+            </div>
+        </div>
+
+
+        <div class="chart-row">
+            <div class="chart-label">
+                RETRY
+            </div>
+
+            <div class="chart-bar-container">
+                <div
+                    id="bar-retry"
+                    class="chart-bar action-retry-bar"
+                ></div>
+            </div>
+
+            <div
+                id="count-retry"
+                class="chart-count"
+            >
+                -
+            </div>
+        </div>
+
+
+        <div class="chart-row">
+            <div class="chart-label">
+                WAIT_AND_NOTIFY
+            </div>
+
+            <div class="chart-bar-container">
+                <div
+                    id="bar-wait"
+                    class="chart-bar action-wait-bar"
+                ></div>
+            </div>
+
+            <div
+                id="count-wait"
+                class="chart-count"
+            >
+                -
+            </div>
+        </div>
+
+
+        <div class="chart-row">
+            <div class="chart-label">
+                UPDATE_PAYMENT_METHOD
+            </div>
+
+            <div class="chart-bar-container">
+                <div
+                    id="bar-update"
+                    class="chart-bar action-update-bar"
+                ></div>
+            </div>
+
+            <div
+                id="count-update"
+                class="chart-count"
+            >
+                -
+            </div>
+        </div>
+
+    </div>
+
+</div>
+    <!-- Recovery Opportunities -->
+
+<div class="panel opportunities-panel">
+
+    <h2>Recovery Opportunities</h2>
+
+    <p class="section-description">
+        Highest-priority failed payments based on expected recoverable revenue.
+    </p>
+    <div class="filters">
+
+    <div class="filter-group">
+        <label for="actionFilter">Action</label>
+
+        <select id="actionFilter">
+            <option value="ALL">All Actions</option>
+            <option value="RETRY">Retry</option>
+            <option value="WAIT_AND_NOTIFY">Wait & Notify</option>
+            <option value="UPDATE_PAYMENT_METHOD">Update Payment</option>
+            <option value="DO_NOT_RETRY">Do Not Retry</option>
+        </select>
+    </div>
+
+
+    <div class="filter-group">
+        <label for="failureFilter">Failure Reason</label>
+
+        <select id="failureFilter">
+            <option value="ALL">All Failures</option>
+            <option value="Network Error">Network Error</option>
+            <option value="Technical Error">Technical Error</option>
+            <option value="Insufficient Funds">Insufficient Funds</option>
+            <option value="Bank Declined">Bank Declined</option>
+            <option value="Expired Card">Expired Card</option>
+        </select>
+    </div>
+
+</div>
+
+    <div class="table-container">
+
+        <table>
+
+        <thead>
+        <tr>
+          <th>Transaction</th>
+          <th>Amount</th>
+          <th>Failure Reason</th>
+          <th>Retry Count</th>
+          <th>Recovery Probability</th>
+          <th>Expected Revenue</th>
+          <th>Action</th>
+          <th>Retry Delay</th>
+       </tr>
+    </thead>
+
+            <tbody id="opportunitiesTable">
+
+                <tr>
+                    <td colspan="7">
+                        Loading opportunities...
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+    <script>
+
+        const form = document.getElementById(
+            "paymentForm"
+        );
+
+        form.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+                document.getElementById(
+                    "error"
+                ).textContent = "";
+
+                const payment = {
+
+                    amount: Number(
+                        document.getElementById(
+                            "amount"
+                        ).value
+                    ),
+
+                    customer_success_rate: Number(
+                        document.getElementById(
+                            "customer_success_rate"
+                        ).value
+                    ),
+
+                    customer_lifetime_value: Number(
+                        document.getElementById(
+                            "customer_lifetime_value"
+                        ).value
+                    ),
+
+                    payment_method:
+                        document.getElementById(
+                            "payment_method"
+                        ).value,
+
+                    failure_reason:
+                        document.getElementById(
+                            "failure_reason"
+                        ).value,
+
+                    retry_count: Number(
+                        document.getElementById(
+                            "retry_count"
+                        ).value
+                    ),
+
+                    transaction_hour: Number(
+                        document.getElementById(
+                            "transaction_hour"
+                        ).value
+                    )
+                };
+
+
+                try {
+
+                    const response = await fetch(
+                        "http://127.0.0.1:8000/predict",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify(payment)
+                        }
+                    );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Prediction request failed"
+                        );
+
+                    }
+
+
+                    const data =
+                        await response.json();
+
+
+                    document.getElementById(
+                        "probability"
+                    ).textContent =
+                        (
+                            data.recovery_probability
+                            * 100
+                        ).toFixed(2) + "%";
+
+
+                    document.getElementById(
+                        "expectedRevenue"
+                    ).textContent =
+                        "₹" +
+                        data.expected_revenue
+                            .toLocaleString("en-IN");
+
+
+                    document.getElementById(
+                        "action"
+                    ).textContent =
+                        data.recommended_action;
+
+
+                    document.getElementById(
+                        "retryDelay"
+                    ).textContent =
+                        data.recommended_retry_delay_minutes
+                        !== null
+                            ? data.recommended_retry_delay_minutes
+                              + " minutes"
+                            : "Not applicable";
+
+
+                    document.getElementById(
+                        "result"
+                    ).style.display = "block";
+
+                }
+
+
+                catch (error) {
+
+                    document.getElementById(
+                        "error"
+                    ).textContent =
+                        "Could not connect to RecoverAI API.";
+
+                }
+
+            }
+        );
+    async function loadDashboard() {
+
+    try {
+
+        const response = await fetch(
+            "http://127.0.0.1:8000/dashboard"
+        );
+
+        const data = await response.json();
+
+
+        document.getElementById(
+            "expectedRecovery"
+        ).textContent =
+            "₹" +
+            (
+                data.expected_recoverable_revenue / 1000000
+            ).toFixed(2) +
+            "M";
+        document.getElementById(
+    "totalFailedValue"
+).textContent =
+    "₹" +
+    (
+        data.total_failed_value / 1000000
+    ).toFixed(2) +
+    "M";
+
+        document.getElementById(
+            "recoveryRate"
+        ).textContent =
+            (
+                data.recovery_rate * 100
+            ).toFixed(2) +
+            "%";
+
+
+        document.getElementById(
+            "totalPayments"
+        ).textContent =
+            data.total_payments.toLocaleString("en-IN");
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Could not load dashboard:",
+            error
+        );
+
+    }
+}
+
+
+loadDashboard();
+
+function getActionClass(action) {
+
+    if (action === "RETRY") {
+        return "action-retry";
+    }
+
+    if (action === "RETRY_LATER") {
+        return "action-later";
+    }
+
+    if (action === "WAIT_AND_NOTIFY") {
+        return "action-wait";
+    }
+
+    if (action === "UPDATE_PAYMENT_METHOD") {
+        return "action-update";
+    }
+
+    return "action-stop";
+}
+
+async function loadOpportunities() {
+
+    const response = await fetch("/opportunities");
+    const data = await response.json();
+
+    const actionFilter = document.getElementById("actionFilter").value;
+    const failureFilter = document.getElementById("failureFilter").value;
+
+    const filteredData = data.filter(row => {
+
+        const actionMatch =
+            actionFilter === "ALL" ||
+            row.recommended_action === actionFilter;
+
+        const failureMatch =
+            failureFilter === "ALL" ||
+            row.failure_reason === failureFilter;
+
+        return actionMatch && failureMatch;
+    });
+
+    const tableBody = document.getElementById("opportunitiesTable");
+
+    tableBody.innerHTML = "";
+
+    filteredData.forEach(row => {
+
+        const actionClass = getActionClass(row.recommended_action);
+
+        const retryDelay =
+            row.retry_delay_minutes === null
+                ? "—"
+                : row.retry_delay_minutes + " min";
+
+        const tableRow = `
+            <tr>
+                <td>${row.transaction_id}</td>
+
+                <td>₹${Number(row.amount).toLocaleString("en-IN")}</td>
+
+                <td>${row.failure_reason}</td>
+
+                <td>${row.retry_count}</td>
+
+                <td>${(row.recovery_probability * 100).toFixed(1)}%</td>
+
+                <td>
+                    ₹${Number(row.expected_revenue).toLocaleString("en-IN", {
+                        maximumFractionDigits: 0
+                    })}
+                </td>
+
+                <td>
+                    <span class="action-badge ${actionClass}">
+                        ${row.recommended_action}
+                    </span>
+                </td>
+
+                <td>${retryDelay}</td>
+            </tr>
+        `;
+
+        tableBody.innerHTML += tableRow;
+    });
+}
+document.getElementById("actionFilter").addEventListener("change", loadOpportunities);
+document.getElementById("failureFilter").addEventListener("change", loadOpportunities);
+
+
+loadOpportunities();
+
+async function loadActionDistribution() {
+
+    try {
+
+        const response = await fetch(
+            "http://127.0.0.1:8000/action-distribution"
+        );
+
+        const data = await response.json();
+
+        const total =
+            Object.values(data).reduce(
+                (sum, value) => sum + value,
+                0
+            );
+
+
+        function updateBar(
+            barId,
+            countId,
+            action
+        ) {
+
+            const count = data[action] || 0;
+
+            const percentage =
+                total > 0
+                    ? (count / total) * 100
+                    : 0;
+
+
+            document.getElementById(
+                barId
+            ).style.width =
+                percentage + "%";
+
+
+            document.getElementById(
+                countId
+            ).textContent =
+                count.toLocaleString("en-IN");
+        }
+
+
+        updateBar(
+            "bar-do-not-retry",
+            "count-do-not-retry",
+            "DO_NOT_RETRY"
+        );
+
+
+        updateBar(
+            "bar-retry",
+            "count-retry",
+            "RETRY"
+        );
+
+
+        updateBar(
+            "bar-wait",
+            "count-wait",
+            "WAIT_AND_NOTIFY"
+        );
+
+
+        updateBar(
+            "bar-update",
+            "count-update",
+            "UPDATE_PAYMENT_METHOD"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Could not load action distribution:",
+            error
+        );
+
+    }
+}
+
+
+loadActionDistribution();
+    </script>
+<footer class="footer">
+    RecoverAI uses synthetic payment data for demonstration purposes.
+    Model outputs are estimates and do not represent actual recovered revenue.
+</footer>
+</body>
+
+</html>
