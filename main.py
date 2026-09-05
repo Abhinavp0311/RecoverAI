@@ -8,7 +8,7 @@ import os
 
 # Load trained model
 pipeline = joblib.load(
-    "models/recovery_pipeline_v2.pkl"
+    "recovery_pipeline_v2.pkl"
 )
 
 
